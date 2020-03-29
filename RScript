@@ -1,0 +1,46 @@
+#Made with curiosity by: Finarfin.
+
+#This code was made by a yankee fan, and, is not intended to be a real analysis of
+#The (Boom)Stros, is just for fun and to show that I can use R.
+
+#Loading basic libraries for R:
+### NOTE: You may need to download the libraries first.
+
+#Loading tidyverse
+library(ggplot2)
+library(tibble)
+
+
+#Importing files
+Batting <- read.csv("~/Documents/R/Baseball/Batting.csv")
+Batting <- as_tibble(Batting[-c(31,32),])
+
+#Creating some visualizations
+
+#Mapping the OBP vs the SLG% and sizing the team according to Avg.
+ggplot(data = Batting) +
+  (mapping = aes(x = OBP, y = SLG, size = BatAge, color = Tm)) +
+  geom_point() +
+  theme(panel.background = element_blank(), legend.key = element_blank()) +
+  #labeling the graph
+  ggtitle("Slugging percentage vs On base percentage by MLB team in 2019.",
+          subtitle = "Every team is sized by team batting average") +
+  scale_color_discrete(name = "Team") +
+  scale_size_continuous(name = "Team Batting Avg") +
+  scale_x_continuous(name = "On Base percentage") +
+  scale_y_continuous(name = "Slugging Percentage") +
+  theme(legend.position = "right") +
+  annotate("text", label = "Mean OBP", x = mean(Batting$OBP) + 0.007, y = 0.375) +
+  annotate("text", label = "Mean Slugging Percentage", x = 0.30, y = mean(Batting$SLG) + 0.007)+
+  annotate("text", label = "H. Astros", x = 0.352, y = 0.500) +
+  #Drawing some descriptive lines in the chart.
+  geom_vline(xintercept = mean(Batting$OBP)) +
+  geom_hline(yintercept = mean(Batting$SLG))
+
+#Mapping the Strike Outs
+ggplot(data = Batting) +
+  (mapping = aes(x = SO)) +
+  geom_histogram(fill = "red") +
+  theme(panel.background = element_blank()) +
+  annotate("text", label = "H. Astros", x = 1166, y = 1.25) +
+  ggtitle("Dispersion of team by Strike Out count in the 2019 season")
